@@ -1,0 +1,349 @@
+% !TEX root =  MCMC-VI-diagnostics-aistats.tex
+
+\newcommand{\grad}{\nabla}
+
+%\newcommand{\lt}{\mathopen{}\mathclose\bgroup\left}
+%\newcommand{\rt}{\aftergroup\egroup\right}
+%\newcommand{\m}{\middle}
+%\newcommand{\lb}{\bigl}
+%\newcommand{\lB}{\Bigl}
+%\newcommand{\lbg}{\biggl}
+%\newcommand{\lBg}{\Biggl}
+%\newcommand{\rb}{\bigr}
+%\newcommand{\rB}{\Bigr}
+%\newcommand{\rbg}{\biggr}
+%\newcommand{\rBg}{\Biggr}
+
+%\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+%\DeclarePairedDelimiter\inner{\langle}{\rangle}
+%\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+%\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+%\DeclarePairedDelimiter\rbra{(}{)}
+%\DeclarePairedDelimiter\cbra{\{}{\}}
+%\DeclarePairedDelimiter\sbra{[}{]}
+
+%--------------------------------------------------------------------------------------
+% General
+%--------------------------------------------------------------------------------------
+\newcommand{\minop}{\mathbin{\wedge}}
+\newcommand{\abscont}{\ll}  % absolutely continuous 
+\newcommand{\nnreals}{\reals_{+}}
+\newcommand{\cconj}[1]{\overline{#1}}  % complex conjugation 
+\newcommand{\im}{\operatorname{im}}
+
+\newcommand{\fracexp}[3]{\left(\frac{#1}{#2}\right)^{#3}}
+\newcommand{\gammafrac}[2]{\frac{\Gamma(#1)}{\Gamma(#2)}}
+\newcommand{\textder}[2]{\dee #1/\dee #2}
+
+\newcommand{\LSI}[1]{\ensuremath{\mathrm{LS}(#1)}}
+\newcommand{\lik}{f}
+\newcommand{\loglik}{\mcL}
+\newcommand{\mcL}{\mathcal{L}}
+
+\newcommand{\onenorm}[1]{\norm{#1}_1} % L1 norm
+\newcommand{\twonorm}[1]{\norm{#1}_2} % L2 norm
+
+\newcommand{\benum}{\begin{enumerate}}
+\newcommand{\eenum}{\end{enumerate}}
+\newcommand{\kl}[2]{\mathrm{H}(#1 \mid #2)}
+\newcommand{\TV}[2]{\textrm{TV}(#1, #2)}
+\newcommand{\pwass}[4]{\mathrm{W}_{#1,#2}(#3, #4)}
+\newcommand{\coupling}{\gamma}
+%--------------------------------------------------------------------------------------
+% Lp spaces
+%--------------------------------------------------------------------------------------
+\newcommand{\Lp}[1]{L^{#1}}
+\newcommand{\Lpnorm}[2]{\norm{#2}_{\Lp{#1}}}
+\newcommand{\Lpinner}[3]{\inner{#2}{#3}_{\Lp{#1}}}
+\newcommand{\Lparg}[2]{L^{#1}(#2)}
+\newcommand{\Lpnormarg}[3]{\staticnorm{#3}_{\Lparg{#1}{#2}}}
+\newcommand{\Lpinnerarg}[4]{\inner{#3}{#4}_{\Lparg{#1}{#2}}}
+\newcommand{\lpnorm}[2]{\norm{#2}_{#1}}
+\newcommand{\lpinner}[3]{\inner{#2}{#3}_{#1}}
+
+
+
+\newcommand{\metric}{m}
+\newcommand{\mcmckernel}{p}
+\newcommand{\Xtdist}[1]{\rho_{#1}}
+\newcommand{\Yndist}[1]{\rho_{#1}}
+
+%--------------------------------------------------------------------------------------
+% Statistics
+%--------------------------------------------------------------------------------------
+\newcommand{\MAD}[2]{\operatorname{MAD}_{#1}({#2})}
+%\newcommand{\MADveci}[2]{\operatorname{MAD}_{#1,#2}}
+\newcommand{\mean}[2]{\mathrm{mean}_{#1}({#2})}
+%\newcommand{\meanvec}[1]{\mu_{#1}}
+%\newcommand{\meanveci}[2]{\mu_{#1,#2}}
+%\renewcommand{\cov}[2]{\mathrm{cov}_{#1}({#2})}
+\newcommand{\std}[2]{\mathrm{std}_{#1}({#2})}
+\newcommand{\dev}[2]{\mathrm{dev}_{#1}({#2})}
+
+\newcommand{\Var}{\mathrm{var}}
+\def\eucnorm#1{|{#1}|} % A norm with 1 argument
+\newcommand{\pwassSimple}[3]{\mathrm{W}_{#1}(#2, #3)}
+
+
+\newcommand{\mainPE}{V}
+\newcommand{\pspace}{E}  % parameter space
+
+% Equality operators
+%\mathtoolsset{centercolon}
+\newcommand{\defined}{:=}
+\newcommand{\xapprox}[1]{\underset{#1}{\approx}}
+\newcommand{\medeq}{\!=\!}
+\newcommand{\shorteq}{\!\!=\!\!}
+
+%--------------------------------------------------------------------------------------
+% SDEs
+%--------------------------------------------------------------------------------------
+\newcommand{\SDE}{\operatorname{SDE}}
+\newcommand{\Wiener}[1]{W_{#1}}
+\newcommand{\dWt}[1]{\dee \Wiener{#1}}
+\newcommand{\Brownian}[2]{B_{#2}^{(#1)}}
+\newcommand{\drift}{b}
+\newcommand{\adrift}{\tilde\drift}
+\newcommand{\potential}{U}
+\newcommand{\apotential}{\tilde\potential}
+\newcommand{\Ft}[1]{F_{#1}}
+\newcommand{\dFt}[1]{\dee \Ft{#1}}
+\newcommand{\allX}{\boldsymbol{X}}
+\newcommand{\Xt}[1]{X_{#1}}
+\newcommand{\dXt}[1]{\dee \Xt{#1}}
+\newcommand{\allY}{\boldsymbol{Y}}
+\newcommand{\Yn}[1]{Y_{#1}}
+\newcommand{\dt}{\dee t}
+\newcommand{\df}{\dee\mkern-1.5mu f}
+\newcommand{\domega}{\dee \omega}
+\newcommand{\transop}[1]{P_{#1}} % transition semigroup
+\newcommand{\gen}{\mcL} % generator
+\newcommand{\adgen}{\gen^{*}} % adjoint of generator
+\newcommand{\gent}[1]{\gen_{#1}} % time-dependent generator
+\newcommand{\adgent}[1]{\adgen_{#1}} % time-dependent generator
+\newcommand{\Dform}{\mcE} % Dirichlet form
+\newcommand{\cdc}{\Gamma} % carré du champ 
+\newcommand{\icdc}{\Gamma_{2}} % iterated carré du champ 
+\newcommand{\probspace}{\mcP}
+\newcommand{\pprobspace}[1]{\mcP_{#1}}
+
+
+
+%--------------------------------------------------------------------------------------
+% Bayesian stuff
+%--------------------------------------------------------------------------------------
+\newcommand{\xvec}{x}
+\newcommand{\xveci}[1]{x_{#1}}
+\newcommand{\Xvec}{X}
+\newcommand{\Xveci}[1]{X_{#1}}
+\newcommand{\dx}{\dee\xvec}
+%\newcommand{\targetdist}{\pi}
+\newcommand{\basemeas}{\lambda}
+\newcommand{\vardist}{\xi}
+\newcommand{\varfamily}{\mcQ}
+\newcommand{\approxdist}{\hat\targetdist}
+\newcommand{\estdist}{\hat\targetdist}
+\newcommand{\targetdistunnormed}{\targetdist'}
+\newcommand{\mainmeas}{\nu}
+\newcommand{\estmeas}{\eta}
+\newcommand{\discrepancy}[2]{{\mathrm{D}_{#1}(#2)}}
+\newcommand{\discrepancyAdjusted}[2]{{\mathrm{\overline D}_{#1}(#2)}}
+
+
+\usepackage{mathtools}
+\usepackage{thmtools}
+%%% MLE estimation with sample size N
+\newcommand{\MLEN}{\widehat{\theta}^{(N)}}
+\newcommand{\MLE}{\widehat{\theta}}
+\newcommand{\Norm}{\mathcal{N}}
+\newcommand{\dist}{\sim}
+\newcommand{\distas}{\sim}
+\newcommand{\distiid}{\overset{\text{iid}}{\distas}}
+
+\newcommand{\obsSpace}{\mathbb{X}}
+\newcommand{\loss}{\mathcal{L}}
+\newcommand{\hess}{\widehat{H}}
+\newcommand{\reg}{\mathcal{R}}
+
+\DeclareMathOperator{\Tr}{Tr}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\inner{\langle}{\rangle}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\rbra{(}{)}
+\DeclarePairedDelimiter\cbra{\{}{\}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Probability and Statistics %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% text shortcuts
+\newcommand{\iid}{\textrm{i.i.d.}\@\xspace}
+\newcommand{\as}{\textrm{a.s.}\@\xspace}
+\newcommand{\aev}{\textrm{a.e.}\@\xspace}
+
+% convergence
+\newcommand{\convas}{\overset{a.s.}{\to}}
+\newcommand{\convp}{\overset{p}{\to}}
+\newcommand{\convd}{\overset{d}{\to}}
+\newcommand{\eqd}{\overset{d}{=}}
+\newcommand{\eqas}{\overset{a.s.}{=}}
+
+%\newcommand{\distiid}{\overset{\text{iid}}{\dist}}
+
+\newcommand{\distNamed}[1]{{\sf{#1}}}
+\newcommand{\distNorm}{\mathcal{N}}
+\newcommand{\distBern}{\distNamed{Bern}}
+\newcommand{\distInvGam}{\distNamed{InvGam}}
+\newcommand{\distind}{\overset{\textrm{\tiny\textrm{indep}}}{\distas}}
+
+%%% Put project-specific definitions here %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Common Sets and Set Operations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\reals}{\ensuremath{\mathbb{R}}}
+\newcommand{\xreals}{\overline{\reals}}
+\newcommand{\ints}{\ensuremath{\mathbb{Z}}}
+\newcommand{\rats}{\ensuremath{\mathbb{Q}}}
+\newcommand{\nats}{\ensuremath{\mathbb{N}}}
+\newcommand{\comps}{\ensuremath{\mathbb{C}}}
+\newcommand{\msrs}{\mathcal{M}}
+\newcommand{\pmsrs}{\mathcal{M}_1}
+\newcommand{\union}{\bigcup}
+\newcommand{\inter}{\bigcap}
+\newcommand{\vol}{\operatorname{vol}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\spann}{\operatorname{span}}
+\newcommand{\bdry}{\partial}
+\newcommand{\cone}{\operatorname{cone}}
+\newcommand{\conv}{\operatorname{conv}}
+
+% unary/functions
+\renewcommand{\Pr}{\mathbb{P}}  % probability
+\newcommand{\E}{\mathbb{E}}	% expectation
+\newcommand{\EE}{\mathbb{E}}	% expectation
+\newcommand{\Law}{\mcL} 
+\newcommand{\var}{\operatorname{Var}}	% variance
+\newcommand{\cov}{\operatorname{Cov}}	% covariance
+\newcommand{\corr}{\operatorname{Corr}}	% correlation
+\newcommand{\supp}{\operatorname{supp}} %support
+
+%Proof clever ref names
+
+%\newtheorem{assumption}{Assumption}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{example}{Example}
+%\newtheorem{remark}{Remark}
+%\newtheorem{corollary}{Corollary}
+%\newtheorem{proposition}{Proposition}
+%\newtheorem{lemma}{Lemma}
+%\newtheorem{condition}{Condition}
+%\newtheorem{definition}{Definition}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% General Purpose %%%
+%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\tuple}[1][]{\left\langle #1 \right\rangle}
+\newcommand{\emptystr}{\text{\o}}
+\newcommand{\ind}{\mathds{1}} % indicator function
+\newcommand{\sgn}{\operatorname{sgn}} % sign function
+\newcommand{\theset}[1]{\lbrace #1 \rbrace}
+\newcommand{\sn}[2]{\ensuremath{#1\!\times\!10^{#2}}}	% #1 x 10^{#2}
+
+\newcommand{\st}{\,:\,}
+\newcommand{\given}{\mid}
+
+
+%%%%%%%%%%%%%%%%%
+%%% Shortcuts %%%
+%%%%%%%%%%%%%%%%%
+\newcommand{\eps}{\epsilon}
+\newcommand{\veps}{\varepsilon}
+
+
+% Equality operators
+\newcommand{\defas}{:=}
+\newcommand{\defines}{=:}
+
+
+
+
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+\def\esssup{\operatornamewithlimits{ess\,sup}}
+\def\essinf{\operatornamewithlimits{ess\,inf}}
+
+%\newcommand{\reals}{\ensuremath{\mathbb{R}}}
+\newcommand{\dee}{\mathrm{d}}
+%\newcommand{\distas}{\sim}
+\newcommand{\mcF}{\mathcal{F}}
+
+\newcommand{\wheretext}[1]{\textcolor{magenta}{[#1]}}
+
+\newcommand{\diagnosticName}{TADDAA\xspace}
+
+\newcommand{\posterior}{\Pi}
+\newcommand{\posteriorDensity}{\pi}
+
+\newcommand{\initialDensity}{\hat{\pi}^{(0)}}
+\newcommand{\improvedDensityAt}[1]{\hat{\pi}^{(#1)}}
+\newcommand{\improvedDensity}{\improvedDensityAt{T}}
+
+%\newcommand{\proposal}[3]{Q_{#3}(#1, \ifstrempty{#2}{\cdot}{\dee{#2}})}  % MCMC proposal kernel density (old value, new value, parameter)
+%\newcommand{\mhkernel}[3]{P_{#3}(#1, \ifstrempty{#2}{\cdot}{\dee{#2}})}  % MCMC kernel (new value, old value, parameter)
+
+\newcommand{\proposal}[3]{Q_{#3}(#1, {\dee{#2}})}  % MCMC proposal kernel density (old value, new value, parameter)
+\newcommand{\mhkernel}[3]{P_{#3}(#1, {\dee{#2}})}  % MCMC kernel (new value, old value, parameter)
+
+
+\newcommand{\proposalDensity}[3]{q_{#3}(#1, #2)}  % MCMC proposal kernel density (old value, new value, parameter)
+\newcommand{\mhkernelDensity}[3]{p_{#3}(#1, #2)}  % MCMC kernel (new value, old value, parameter)
+\newcommand{\proposalParam}{\psi}
+\newcommand{\acceptprob}[2]{\alpha(#1, #2)}
+\newcommand{\rejectprob}[2]{r_{#2}(#1)}
+
+\newcommand{\state}{x}
+\newcommand{\proposedState}{y}
+\newcommand{\stateDim}{d}
+\newcommand{\stateDimInd}{i}
+
+\newcommand{\mcState}{X}
+\newcommand{\mcProposedState}{Y}
+\newcommand{\mcIters}{T}
+\newcommand{\mcIterInd}{t}
+
+%sequence of samples
+\newcommand{\CurrentSamples}{X_{1:N}^{(t)}}
+\newcommand{\CurrentProposals}{Y_{1:N}^{(t)}}
+
+%single sample and proposal
+\newcommand{\CurrentSingleSample}{X_{j}^{(t)}}
+\newcommand{\CurrentSingleSamplePre}{X_{j}^{(t-1)}}
+\newcommand{\CurrentSingleProposal}{Y_{j}^{(t)}}
+\newcommand{\CurrentSingleProposalPre}{Y_{j}^{(t-1)}}
+\newcommand{\NewSingleSample}{X_{j}^{(t+1)}}
+\newcommand{\NewSingleProposal}{Y_{j}^{(t+1)}}
+
+%step size
+\newcommand{\CurrentStepsize}{h_{N}^{(t)}}
+\newcommand{\PreviousStepsize}{h_{N}^{(t-1)}}
+\newcommand{\NewStepsize}{h_{N}^{(t+1)}}
+\newcommand{\LimitingStepsizePre}{\bar{h}^{(t-1)}}
+\newcommand{\LimitingStepsize}{\bar{h}^{(t)}}
+
+%empirical measure
+\newcommand{\EmpiricalMeasureX}{\nu_{N}^{(t)}}
+\newcommand{\LimitingMeasureXt}{\bar{\nu}^{(t)}}
+
+
+\newcommand{\EmpiricalMeasureXY}{\xi_{N}^{(t)}}
+\newcommand{\EmpiricalMeasureXYPre}{\xi_{N}^{(t-1)}}
+\newcommand{\LimitingMeasureXY}{\bar{\xi}^{(t)}}
+\newcommand{\LimitingMeasureXYPre}{\bar{\xi}^{(t-1)}}
+
+\newcommand{\EmpiricalMeasureXYTilde}{\tilde{\xi}_N^{(t)}}
+
+% filtration
+\newcommand{\Filtrationcurrent}{\mathcal{F}_{N}^{(t)}}
+\newcommand{\FiltrationcurrentPre}{\mathcal{F}_{N}^{(t-1)}}
