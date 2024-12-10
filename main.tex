@@ -1,15 +1,15 @@
 \documentclass[10pt,xcolor=table]{beamer}
 
 % Use the preamble setting
-\newtheorem{assumption}{Assumption}
-% \newtheorem{theorem}{Theorem}
+%\newtheorem{assumption}{Assumption}
+%\newtheorem{theorem}{Theorem}
 % \newtheorem{example}{Example}
 % \newtheorem{remark}{Remark}
 % \newtheorem{corollary}{Corollary}
- \newtheorem{proposition}{Proposition}
+\newtheorem{proposition}{Proposition}
 % \newtheorem{lemma}{Lemma}
 % \newtheorem{condition}{Condition}
-% \newtheorem{definition}{Definition}
+%\newtheorem{definition}{Definition}
 \input{preamble.tex}
 \input{local-defs.tex}
 
@@ -54,34 +54,68 @@
 %	\end{itemize}
 %\end{frame}
 
-\begin{frame}{Bayesian Approximation}
+\begin{frame}{Bayesian Inference}
+\begin{figure}
+\includegraphics[width=\textwidth]{Bayesian_inference.png}
+\end{figure}
+	
 	\begin{equation*}
-		\pi\left(\theta \mid \{Y_{i}\}_{i=1}^{N} \right)=\frac{\prod_{i=1}^{N} p(Y_{i} \mid \theta) \pi_0(\theta)}{Z}
+		\pi\left(\theta \mid Y \right)=\frac{P(Y \mid \theta) \pi_0(\theta)}{Z}
 	\end{equation*}
-	\begin{itemize}
-		\item We want to learn about $\pi$, typically by calculating expectations
-		$$\EE\{f(\Xt{})\} \defined \pi(f) \defined \int f(\xvec) \pi(\dx).$$ \pause
-		\item However, in general, the expectations can’t be done exactly. \pause
-		\item Approximate inference: Markov chain Monte Carlo (MCMC) constructs a Markov chain $\Yn{0}, \Yn{1}, \Yn{2}, \dots,$ such that $\Yndist{n} \to \pi$
-		\[
-		\sum_{n=1}^{N} f(\Yn{n}) / N \convas \pi(f) \quad\text{for } N \to \infty. \label{eq:SLLN}
-		\]
-	\end{itemize}
+	
+%	\begin{itemize}
+%		\item We want to learn about $\pi$, typically by calculating expectations
+%		$$\EE\{f(\Xt{})\} \defined \pi(f) \defined \int f(\xvec) \pi(\dx).$$ \pause
+%		\item However, in general, the expectations can’t be done exactly. \pause
+%		\item Approximate inference: Markov chain Monte Carlo (MCMC) constructs a Markov chain $\Yn{0}, \Yn{1}, \Yn{2}, \dots,$ such that $\Yndist{n} \to \pi$
+%		\[
+%		\sum_{n=1}^{N} f(\Yn{n}) / N \convas \pi(f) \quad\text{for } N \to \infty. \label{eq:SLLN}
+%		\]
+%	\end{itemize}
 \end{frame}
+
+\begin{frame}{Bayesian Approximation}
+%	\begin{figure}
+%		\includegraphics[width=\textwidth]{Bayesian_inference.png}
+%	\end{figure}
+	
+	\begin{equation*}
+		\pi\left(\theta \mid Y \right)=\frac{P(Y \mid \theta) \pi_0(\theta)}{Z}
+	\end{equation*}
+	
+		\begin{itemize}
+				\item We want to learn about $\pi$, typically by calculating expectations
+				\begin{itemize}
+					\item Find the mean and covariance of $\theta$ \pause
+				\end{itemize}
+%				$$\EE\{f(\Xt{})\} \defined \pi(f) \defined \int f(\xvec) \pi(\dx).$$ \pause
+				\item However, in general, the expectations can’t be done exactly \pause
+				\item Approximate inference: 
+				\begin{itemize}
+				\item Markov chain Monte Carlo (MCMC) 
+				\end{itemize}
+%				constructs a Markov chain $\Yn{0}, \Yn{1}, \Yn{2}, \dots,$ such that $\Yndist{n} \to \pi$
+%				\[
+%				\sum_{n=1}^{N} f(\Yn{n}) / N \convas \pi(f) \quad\text{for } N \to \infty. \label{eq:SLLN}
+%				\]
+			\end{itemize}
+\end{frame}
+
+
 
 \begin{frame}{Challenges in Modern Approximate Bayesian Inference}
 	\begin{itemize}
 		\item \textbf{Challenges:}
 		\begin{itemize}
-			\item high-dimensional $\theta \in \reals^{D}$, $D$ is large.
-			\item complex relationship $p(Y_{i}|\theta)$.
-			\item large-sclae dataset $\{Y_{i}\}_{i=1}^{N}$. 
+			\item high-dimensional $\theta \in \reals^{D}$, $D$ is large
+			\item complex relationship $p(Y|\theta)$
+			\item large-scale dataset
 		\end{itemize}\pause
 		\item \textbf{Problems of MCMC:}
 		\begin{itemize}
-			\item Slow convergence and mixing in high-dimensional spaces.
-			\item Computational cost of likelihood evaluation is proportional to the dataset size.
-			\item Diagnosing convergence is harder in high dimensions.
+			\item Slow convergence and poor mixing in complex cases e.g. those involving heterogeneity or high correlation between coordinates
+			\item Computational cost of likelihood evaluation is proportional to the dataset size
+%			\item Diagnosing convergence is harder in high dimensions.
 		\end{itemize} \pause
 		\item \textbf{Mitigations:}
 		\begin{itemize}
@@ -107,9 +141,13 @@
 		\item \textcolor{gray}{A priori finite-time, finite-data guarantees:\\
 		A Unifying Framework for Understanding General-purpose Bayesian Posterior Approximation Methods, \\
 		Huggins, Kasprzak, \textbf{Wang}, Campbell, Broderick. In prep} \pause
-		\item \textbf{A post hoc quality check for VI}: \\A Targeted Accuracy Diagnostic for Variational Approximations (TADDAA), \textbf{Wang}, Kasprzak, Huggins. AISTATS 2023.
+		\item \textbf{A post hoc quality check for VI}: \\A Targeted Accuracy Diagnostic for Variational Approximations (TADDAA), 
+		
+		\textbf{Wang}, Kasprzak, Huggins. AISTATS 2023.
 		\item \textbf{Uncertainty quantification for Subsampling methods}:\\
-		Stationary Analysis of Fixed Learning Rate Stochastic Gradient Algorithms, \textbf{Wang} $\&$ Huggins. (Under Review)
+		Stationary Analysis of Fixed Learning Rate Stochastic Gradient Algorithms, 
+		
+		\textbf{Wang} $\&$ Huggins. (Under Review)
 	\end{itemize}
 \end{frame}
 
@@ -118,7 +156,7 @@
 
 \begin{frame}
   \frametitle{Markov chain Monte Carlo (MCMC) }
-  MCMC sampling methods provide a general-purpose framework for obtaining samples that are asymptotically exact.
+%  MCMC sampling methods provide a general-purpose framework for obtaining samples that are asymptotically exact.
   \begin{itemize}
   \item \textbf{Proposal distribution:} $\proposal{\state}{\proposedState}{\proposalParam}$ parameterized by $\proposalParam$ with current state $\state$ and corresponding density $\proposalDensity{\state}{\proposedState}{\proposalParam}$.
   \item \textbf{Metropolis--Hastings (MH) correction:} to construct a Markov kernel with the desired stationary distribution $\pi$, a proposed state 
@@ -142,10 +180,10 @@ Variational inference (VI) provides a potentially faster alternative to MCMC whe
 % \[ \hat{\mainmeas}   = \argmin_{\xi \in \mathcal{Q}} \mathcal{D}_{\mainmeas}(\xi). \]
     \item Variational family $\mathcal{Q}$: we are able to efficiently calculate
 expectations of interest (e.g. mean and variance).  
-    \item Measure of discrepancy $\mathcal{D}_{\mainmeas}(\cdot)$: the canonical choice is \emph{Kullback--Leibler (KL) divergence} out of convenience. 
-\[
-\mathcal{D}_{\posteriorDensity}(\xi) = \mathrm{KL}(\xi \mid \posteriorDensity) :=\int \log \left(\frac{\mathrm{d} \xi}{\mathrm{d} \posteriorDensity}\right) \mathrm{d} \xi.
-\]
+    \item Measure of discrepancy $\mathcal{D}_{\pi}(\cdot)$: the canonical choice is \emph{Kullback--Leibler (KL) divergence} out of convenience. 
+%\[
+%\mathcal{D}_{\posteriorDensity}(\xi) = \mathrm{KL}(\xi \mid \posteriorDensity) :=\int \log \left(\frac{\mathrm{d} \xi}{\mathrm{d} \posteriorDensity}\right) \mathrm{d} \xi.
+%\]
 \end{itemize}
 \end{frame}
 
@@ -153,22 +191,24 @@ expectations of interest (e.g. mean and variance).
 \begin{itemize}
     \item Existing evaluation tools:
     \begin{itemize}
-        \item Evidence Lower Bound (ELBO).
-        \item Kernel Stein Discrepancy (KSD).
-        \item Pareto smoothed importance sampling (PSIS) $\hat{k}$.
+        \item Evidence Lower Bound (ELBO)
+        \item Kernel Stein Discrepancy (KSD)\footnote{Gorham et al. (2017). Measuring sample quality with kernels.International Conference on Machine Learning.}
+        \item Pareto smoothed importance sampling (PSIS) $\hat{k}$\footnote{Yao et al. (2018) Yes, but did it work?: Evaluating variational inference. 35th International Conference on Machine Learning (ICML).}
+        \item $W_{2}$ upper bound\footnote{Huggins et al. (2020) Validated variational inference via practical posterior error bounds. AISTATS}
     \end{itemize}
     \item Problems:
     \begin{itemize}
-        \item Lack interpretability.
+        \item Lack interpretability
         \item Not applicable in high-dimensional parameter spaces.
-        \item Don't support marginal checks.
+        \item Don't support marginal checks
     \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{TADDAA:Intuition}
+\begin{frame}{TADDAA: Intuition}
 	
-  We want to quantify approximation error $\varepsilon^{(0)}(\mcF) \defas \mcF(\initialDensity) - \textcolor{red}{\mcF(\posteriorDensity)}$ for a posterior functional of interest $\mcF$ such as a mean or variance.
+  We want to quantify approximation error $\varepsilon^{(0)} \defas \mu(\initialDensity) - \textcolor{red}{\mu(\posteriorDensity)}$ 
+%  for a posterior functional of interest $\mcF$ such as a mean or variance.
   \begin{columns}
     \begin{column}{.44\textwidth}
       \begin{figure}[t]
@@ -178,18 +218,18 @@ expectations of interest (e.g. mean and variance).
     \end{column}
     \begin{column}{.6\textwidth}
         \begin{itemize}
-        \item For another approximation $\hat{\pi}^{(T)}$ closer to taget posteriror $\pi$, $\varepsilon^{(T)}(\mcF) \defas \mcF(\improvedDensity) - \textcolor{red}{\mcF(\posteriorDensity)}$
+        \item For another approximation $\hat{\pi}^{(T)}$ closer to taget posteriror $\pi$, $\varepsilon^{(T)} \defas \mu(\improvedDensity) - \textcolor{red}{\mu(\posteriorDensity)}$
         \item 
         \begin{equation*}
 		\begin{aligned}
-			&\varepsilon^{(0)}(\mcF)
-			\ge |\mcF(\initialDensity) - \mcF(\improvedDensity)| \\
-			&\ge \begin{cases}
-				0 & \text{if $\ell_{\mcF} \le 0 \le u_{\mcF}$} \\
-				\min(|\ell_{\mcF}|, |u_{\mcF}|) & \text{otherwise} 
-			\end{cases} \\
-			&= \mathbf{1} \left\{0 \notin (\ell_{\mcF},  u_{\mcF})\right\} \times \min(|\ell_{\mcF}|, |u_{\mcF}|) \\
-			&\defines  B_{\mcF}. 
+			&\varepsilon^{(0)}
+			\ge |\mu(\initialDensity) - \mu(\improvedDensity)| \\
+%			&\ge \begin{cases}
+%				0 & \text{if $\ell_{\mu} \le 0 \le u_{\mu}$} \\
+%				\min(|\ell_{\mu}|, |u_{\mu}|) & \text{otherwise} 
+%			\end{cases} \\
+%			&= \mathbf{1} \left\{0 \notin (\ell_{\mu},  u_{\mu})\right\} \times \min(|\ell_{\mu}|, |u_{\mu}|) \\
+%			&\defines  B_{\mu}. 
 		\end{aligned}
 		\end{equation*}
         \end{itemize}
@@ -198,13 +238,46 @@ expectations of interest (e.g. mean and variance).
   
 \end{frame}
 
+\begin{frame}{Example: Low-quality VI}
+  \begin{columns}
+	\begin{column}{.44\textwidth}
+		\begin{figure}[t]
+			\includegraphics[width=\textwidth]{neal_vi.pdf}
+			\caption{Variational approximation on 2-D Neal-Funnel shape model.}
+		\end{figure}
+	\end{column}
+	\begin{column}{.6\textwidth}
+%Neal's example has support for $\log(\sigma) \in \mathbb{R}$ and $x \in \mathbb{R}^{d-1}$. 
+The parameterization of Neal-Funnel shape model is given as follows:
+$$
+\log(\sigma) \sim \mathcal{N}(0, \sigma_{0}^{2}), \quad x_{i} \sim \mathcal{N}(0,\sigma).
+$$
+%For illustrative purpose, let $\beta_{1}=\log(\sigma)$ and $\beta_{2}=x_{1}$.
+	\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{TADDAA Framework}
+\begin{figure}[t]
+	\includegraphics[width=\textwidth]{TADDAA_framework.png}
+%	\caption{Variational approximation on 2-D Neal-Funnel shape model.}
+\end{figure} \pause
+
+\textcolor{red}{\textbf{Why not use MCMC directly?}}
+\begin{itemize}
+	\item Slow convergence in complicated cases.
+	\item TADDAA \textbf{DOES NOT} rely on convergence of Markov chains.
+\end{itemize}
+
+\end{frame}
+
 
 \begin{frame}{TADDAA:Input}
 \begin{columns}
   \begin{column}{0.5\linewidth}
 \begin{figure}
   \begin{center}
-    \includegraphics[width = \textwidth]{vi_samples.pdf}
+    \includegraphics[width = \textwidth]{neal_vi_sample.pdf}
   \end{center}
 \end{figure}
   \end{column}
@@ -214,8 +287,8 @@ expectations of interest (e.g. mean and variance).
        % \heading{\textcolor{blue}{Input:}}
         \begin{itemize}
             \item log density of the target $\pi$
-            \item approximating distribution $\hat{\pi}^{(0)}$
-            \item functional of interest $\mathcal{F}$ (e.g. marginal mean)
+            \item approximating distribution $\hat{\pi}^{(0)}$ \pause
+            \item functional of interest $\mathcal{F}$ (e.g. marginal mean) \pause
             \item transition kernel $K_h(x, \mathrm{~d} y)$ (e.g. Barker, HMC) %and $\psi^{(0)}$
             \item number of Markov chains $N$ and iterations $T$
         \end{itemize}
@@ -228,7 +301,7 @@ expectations of interest (e.g. mean and variance).
   \begin{column}{0.5\linewidth}
 \begin{figure}
   \begin{center}
-    \includegraphics[width = \textwidth]{improved_samples.pdf}
+    \includegraphics[width = \textwidth]{neal_vi_improved_samples.pdf}
   \end{center}
 \end{figure}
   \end{column}
@@ -253,19 +326,19 @@ expectations of interest (e.g. mean and variance).
   \end{columns}
 \end{frame}
 
-\begin{frame}{TADDAA:Compute error lower bounds and reliability check}
+\begin{frame}{TADDAA:Compute error lower bounds}
 \begin{columns}[T]
   \begin{column}{0.5\linewidth}
 \begin{figure}[p]
     \centering 
-    \includegraphics[width = \textwidth]{run_tests.pdf}
+    \includegraphics[width = \textwidth]{neal_vi_all_samples.pdf}
 \end{figure}
   \end{column}
   \begin{column}{0.5 \linewidth}
         %\textbf{\textcolor{blue}{3.Compute error lower bounds and reliability check:}}
         % \heading{\textcolor{blue}{3.Compute error lower bounds and reliability check:}}
         \begin{itemize}
-                \item Compute correlation check $\rho_{\max }^2(T)$
+%                \item Compute correlation check $\rho_{\max }^2(T)$
                 \item Compute a confidence interval $(\ell_{\mathcal{F}}, u_{\mathcal{F}})$ for $\mathcal{F}(\hat{\pi}^{(0)})-\mathcal{F}(\hat{\pi}^{(T)})$ based on $X_{1: N}^{(0)}$ and $X_{1: N}^{(T)}$
                 \item Compute lower bound $B_{\mathcal{F}}$
         \end{itemize}
@@ -284,43 +357,91 @@ expectations of interest (e.g. mean and variance).
 % \end{frame}
 
 \begin{frame}{Transition kernel $K_h(x, \mathrm{~d} y)$}
-Let $x \in \reals^{d}$ denote the current state, 
-$h \in \reals_{+}$ the step size, and $G \in \reals^{d \times d}$ a positive semi-definition preconditioning matrix. 
+%Let $x \in \reals^{d}$ denote the current state, 
+%$h \in \reals_{+}$ the step size, and $G \in \reals^{d \times d}$ a positive semi-definition preconditioning matrix. 
 \begin{itemize}
     \item Random Walk Metropolis-Hasting (RWMH). 
     \item Metropolis-adjusted Langevin algorithm (MALA).
     \item Hamiltonian Monte Carlo (HMC).
-    \item \textbf{Barker Proposal (recommended choice)}: robust to precise step size and acceptance rate. 
+    \item \textbf{Barker Proposal\footnote{Livingstone et al. The Barker proposal: combining robustness and efficiency in gradient-based MCMC. Journal of the Royal Statistical Society Series B: Statistical Methodology (2022)} (recommended choice)}
+    \begin{itemize}
+    	\item robust to precise step size and acceptance rate. 
+    	\item high sampling efficiency.
+    \end{itemize}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Step size $h$}
-All four kernels rely on a step-size parameter $h^{(t)}$, to guarantee superior sampling efficiency when dimension $d$ is large, $h^{(t)}$ should be adapted according to \emph{inter-chain adaptation} (INCA) and \emph{optimal scaling}.
-    \begin{itemize}
-        \item Step size adaption: 
+%All four kernels rely on a step-size parameter $h^{(t)}$, to guarantee superior sampling efficiency when dimension $d$ is large, $h^{(t)}$ should be adapted according to \emph{inter-chain adaptation} (INCA) and \emph{optimal scaling}.
+Step size adaption: 
             \begin{itemize}
-                \item Generate proposals 
-$Y_{j}^{(t+1)} \distas Q_{\proposalParam^{(t)}}(X_{j}^{(t)}, \cdot)$, then accept with probability $\alpha^{(t)}_{j}$. 
-                \item \[
-\label{eq:adaptive step size}
-\psi^{(t+1)}= \psi^{(t)} +  \frac{1}{\sqrt{t+1}}(\bar\alpha^{(t)} - \bar{\alpha}_{*}),
-\]
-where $\psi^{(t)} =\log h^{(t)}$ and $\bar{\alpha}_{*}$ is optimal asymptotic acceptance. 
+                \item \textbf{Inter-chain adaptation(INCA)}\footnote{Craiu et al. Learn from thy neighbor: Parallel-chain and regional adaptive MCMC. Journal of the American Statistical Association (2009).}
+                \begin{itemize}
+                	\item $Y_{j}^{(t+1)} \distas Q_{h^{(t)}}(X_{j}^{(t)}, \cdot)$, accept with probability $\alpha^{(t)}_{j}$. 
+                	\item $\bar\alpha^{(t)} = \frac{1}{N} \sum_{j=1}^{N} \alpha^{(t)}_{j}$.
+                \end{itemize}
+				\item \textbf{Optimal Scaling}\footnote{Roberts et al. Optimal scaling for various Metropolis-Hastings algorithms. Statistical science (2001).}
+				
+				\begin{itemize}
+					\item  $
+					\label{eq:adaptive step size}
+					\log h^{(t+1)}= \log h^{(t)} +  \frac{1}{\sqrt{t+1}}(\bar\alpha^{(t)} - \bar{\alpha}_{*}),$
+					$\bar{\alpha}_{*}$ is optimal asymptotic acceptance. 
+				\end{itemize}
             \end{itemize} \pause
-        \item Optimal initial step size $h^{(0)}$ and $\bar{\alpha}_{*}$:
+Optimal initial step size $h^{(0)}$ and $\bar{\alpha}_{*}$:
         \begin{itemize}
-            \item RWMH: $h^{(0)} = 2.4^2/d$, $\bar{\alpha}_{*} = 0.234$. 
-            \item MALA and Barker: $h^{(0)} = {2.4^2}/{d^{1/3}}$, $\bar{\alpha}_{*} = 0.576$.
-            \item HMC: $h^{(0)} = {2.4^2}/{d^{1/4}}$, $\bar{\alpha}_{*} = 0.4$.
+%            \item RWMH: $h^{(0)} = 2.4^2/d$, $\bar{\alpha}_{*} = 0.234$. 
+            \item e.g. Barker: $h^{(0)} = {2.4^2}/{d^{1/3}}$, $\bar{\alpha}_{*} = 0.576$.
+%            \item HMC: $h^{(0)} = {2.4^2}/{d^{1/4}}$, $\bar{\alpha}_{*} = 0.4$.
         \end{itemize} \pause 
-        \item \textcolor{red}{Problem:} INCA introduces dependence between the Markov chains, which could invalidate the statistical tests and confidence intervals. 
-    \end{itemize}
+\textcolor{red}{Problem:} INCA introduces dependence for $X_{1:N}^{(T)}$. 
+\end{frame}
+
+\begin{frame}{Asymptotic Independence of Adapted Markov Chains}
+	$\CurrentSamples$ are dependent $\rightarrowtail$
+	independence assumption of tests violated. \pause
+	\begin{definition}
+		Let $X_{N,1:N} = (X_{N,1}, \dots, X_{N,N})$ denote a random vector.
+		The sequence of random vectors $\{ X_{N,1:N} \}_{N=1}^{\infty}$ is \textbf{$\bar\nu$-chaotic} if, 
+		for any $r \in \nats$ and any bounded continuous real-valued functions $g_{1}, g_{2}, \ldots, g_{r}$,
+		\[
+		\begin{aligned}
+			\lim _{N \rightarrow \infty}\EE_{X_{N,1:N}}\left\{\prod_{i=1}^{r}g_{i}\left(X_{N,i}\right)\right\}
+			&= \prod_{i=1}^{r} \int g_{i}(x) \bar\nu(\dee x).
+		\end{aligned}
+		\]
+		\label{chaos definition}
+	\end{definition}
+\end{frame}
+
+\begin{frame}{Adapted Markov Chains are Chaotic}
+	%\begin{assumption} 
+	%	\label{assumption}
+	%	%We have the following assumptions. 
+	%	\begin{enumerate}
+		%		\item \label{assumption1}%
+		%		The proposal probability density $q_{h}(y, x)$ is continuous with respect to $(x, y, h)$.
+		%		\item \label{assumption2}%
+		%		The target distribution has a continuous probability density function $\posteriorDensity(\cdot)$.
+		%		\item \label{assumption3}%
+		%		Samples generated from the Markov transition kernel $T (x, y, h, \cdot, \cdot )$ satisfy $\EE \|X_{j}^{(t)}\|^{2} < \infty$ and $\EE \|Y_{j}^{(t)}\|^{2} < \infty$ for any $t \in \nats$.
+		%	\end{enumerate}
+	%\end{assumption}
+	\begin{theorem}
+		\label{propagation of chaos for x}
+		Under some mild assumptions, for any $t \in \nats$, there exists a probability 
+		distribution $\LimitingMeasureXt$ such that the sequence 
+		$\{\CurrentSamples\}_{N=1}^{\infty}$ is $\LimitingMeasureXt$-chaotic.
+	\end{theorem}
+	
 \end{frame}
 
 \begin{frame}{Number of Markov chains $N$}
 % The number of iterations has to be large enough that the improved distribution $\improvedDensity$ is sufficiently different from a poor approximating distribution $\initialDensity$.
-The number of Markov chains must be sufficiently large that the confidence intervals are small enough to detect meaningful errors.
-Hence, if the user's tolerance is $\delta_{\text{mean}}$ for relative mean error and $\delta_{\text{var}}$ for log variance error, then 
+%The number of Markov chains must be sufficiently large that the confidence intervals are small enough to detect meaningful errors.
+%Hence, if the user's tolerance is $\delta_{\text{mean}}$ for relative mean error and $\delta_{\text{var}}$ for log variance error, then 
+$N$ is determined by user's tolerance for statistical test error $\delta$, e.g.
 \[
 \begin{aligned}
 	\label{eq:sample-size}
@@ -337,7 +458,7 @@ where
 \end{frame}
 
 \begin{frame}{Number of iterations $T$}
-Markov chain requires $\Theta(d^{\gamma})$ iterations to mix according to theory of optimal scaling. 
+Markov chain requires $\Theta(d^{\gamma})$ iterations to mix according to theory of optimal scaling \footnote{Roberts et al. Optimal scaling for various Metropolis-Hastings algorithms. Statistical science (2001).}. 
 \begin{itemize}
     \item For RWMH, MALA, Barker: $T = \lfloor c d^{1/3} \rfloor$.
     \item For HMC: $T = \lfloor c d^{1/4}/L \rfloor, $
@@ -345,10 +466,10 @@ Markov chain requires $\Theta(d^{\gamma})$ iterations to mix according to theory
 \end{itemize} \pause
 \textbf{Remark}
 \begin{itemize}
-    \item Based on our ablation studies, $c= 50$ is a reasonable choice. 
-    \item Theories \footnote{Bhatia, Kush, et al. Statistical and computational trade-offs in variational inference: A case study in inferential model selection.} suggest computational cost of TADDAA is comparable to VI:
+%    \item Based on our ablation studies, $c= 50$ is a reasonable choice. 
+    \item Computational cost of TADDAA is comparable to VI:
     \begin{itemize}
-        \item Computational cost for VI: $\Theta(d^{1/3})$.
+        \item Computational cost for VI: $\Theta(d^{1/3})$\footnote{Bhatia, Kush, et al. Statistical and computational trade-offs in variational inference: A case study in inferential model selection.}.
         \item Computational cost for MALA and Barker: $\Theta(d^{1/3})$.
         \item Computational cost for HMC: $\Theta(d^{1/4})$.
     \end{itemize}
@@ -357,97 +478,86 @@ Markov chain requires $\Theta(d^{\gamma})$ iterations to mix according to theory
 
 \begin{frame}{A Reliability Check for the Diagnostic}
 The reliability of TADDAA depends on the mixing behavior of the Markov chains: 
-\begin{itemize}
-    \item If the Markov chains are mixing well, we expect the diagnostic results can be trusted.
-    \item If the Markov chains are not mixing well, diagnosis of a poor approximation can still be trusted but diagnosis of a good approximation may not be reliable. \footnote{In the latter case, we should consider increasing the length of Markov chains or otherwise improving the Markov kernel.}
-\end{itemize}
-\end{frame}
 
-\begin{frame}{A Reliability Check for the Diagnostic (Continued)}
-% Instead, we propose to leverage the fact that we have many nearly independent chains to compute the correlation between the initial and final values of each chain.
-% If the chains are mixing, then this correlation will be close to zero. 
-% Specifically we propose to use the worst-case correlation coefficient
-
-\begin{itemize} 
-    \item We propose to use the worst-case correlation coefficient
-$
-\rho^{2}_{\max}(T)
-\defas \max_{i} \rho^{2}_{i}(T),
-%&= \max_{k}\frac{\sum_{j=1}^{N} ( X_{j,k}^{(0)}-\hat{\mu}_{k}^{(0)})( X_{j,k}^{(T)}-\hat{\mu}_{k}^{(T)})}{\sum_{j=1}^{N}( x_{j,k}^{(0)}-\hat{\mu}_{k}^{(0)})^{2} ( x_{j,k}^{(T)}-\hat{\mu}_{k}^{(T)})^{2}},
-$
-where 
-\[
-\begin{aligned}
-	% \rho^{2}\Big(X_{1:N,k}^{(0)},  X_{1:N,k}^{(T)}\Big)
-	\textstyle \rho^{2}_{i}(T)
-	\defas  \frac{\sum_{j=1}^{N} ( X_{j,i}^{(0)}-\hat{\mu}_{i}^{(0)})( X_{j,i}^{(T)}-\hat{\mu}_{i}^{(T)})}{\sqrt{\sum_{j=1}^{N}( X_{j,i}^{(0)}-\hat{\mu}_{i}^{(0)})^{2}} \sqrt{(\sum_{j=1}^{N} X_{j,i}^{(T)}-\hat{\mu}_{i}^{(T)})^{2}}}.
-\end{aligned}
-\]
-    \item Check passes: $\rho^{2}_{\max}(T) < 0.1$.
-    % \item $\rho^{2}_{\max}(T)$ large, then the check passes.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Asymptotic Independence of Adapted Markov Chains}
-The Markov chains $\CurrentSamples$ are not independent once $t > 1$, 
-so the final samples $X_{1:N}^{(T)}$ violate the independence requirement of statistical tests. \pause
-\begin{definition}
-	Let $X_{N,1:N} = (X_{N,1}, \dots, X_{N,N})$ denote a random vector.
-	The sequence of random vectors $\{ X_{N,1:N} \}_{N=1}^{\infty}$ is \emph{$\bar\nu$-chaotic} if, 
-	for any $r \in \nats$ and any bounded continuous real-valued functions $g_{1}, g_{2}, \ldots, g_{r}$,
-	\[
-	\begin{aligned}
-		\lim _{N \rightarrow \infty}\EE_{X_{N,1:N}}\left\{\prod_{i=1}^{r}g_{i}\left(X_{N,i}\right)\right\}
-		&= \prod_{i=1}^{r} \int g_{i}(x) \bar\nu(\dee x).
-	\end{aligned}
-	\]
-\label{chaos definition}
-\end{definition}
-\end{frame}
-
-\begin{frame}{Adapted Markov Chains are Chaotic}
-\begin{assumption} 
-	\label{assumption}
-	%We have the following assumptions. 
-	\begin{enumerate}
-		\item \label{assumption1}%
-		The proposal probability density $q_{h}(y, x)$ is continuous with respect to $(x, y, h)$.
-		\item \label{assumption2}%
-		The target distribution has a continuous probability density function $\posteriorDensity(\cdot)$.
-		\item \label{assumption3}%
-		Samples generated from the Markov transition kernel $T (x, y, h, \cdot, \cdot )$ satisfy $\EE \|X_{j}^{(t)}\|^{2} < \infty$ and $\EE \|Y_{j}^{(t)}\|^{2} < \infty$ for any $t \in \nats$.
-	\end{enumerate}
-\end{assumption}
-\begin{theorem}
-\label{propagation of chaos for x}
-Under some mild assumptions, for any $t \in \nats$, there exists a probability 
-distribution $\LimitingMeasureXt$ such that the sequence 
-$\{\CurrentSamples\}_{N=1}^{\infty}$ is $\LimitingMeasureXt$-chaotic.
-\end{theorem}
-
-\end{frame}
-
-\begin{frame}{Experiment: Neal-Funnel Shape Model}
-Neal's example has support for $\log(\sigma) \in \mathbb{R}$ and $x \in \mathbb{R}^{d-1}$. The parameterization of this model is given as follows:
-$$
-    \log(\sigma) \sim \mathcal{N}(0, \sigma_{0}^{2}), \quad x_{i} \sim \mathcal{N}(0,\sigma).
-$$
-For illustrative purpose, let $\beta_{1}=\log(\sigma)$ and $\beta_{2}=x_{1}$. In our experiment, $\sigma_{0}=1$.
-\begin{figure}
-    \centering 
-    \includegraphics[width = 0.25\textwidth]{neal_funnel.jpg}
-\end{figure}
-\end{frame}
-
-\begin{frame}{Experiment: Neal-Funnel Shape Model}
 \begin{figure}[t]
-    \includegraphics[width=\linewidth]{neal_high_new.pdf}
+	\includegraphics[width=\linewidth, height = 6cm]{reliability_check.png}
+\end{figure}
+%\begin{itemize}
+%    \item Markov chains mixing well: TADDAA can be trusted.
+%    \item Markov chains not mixing well:
+%    \begin{itemize}
+%    	\item Diagnosis of a poor approximation: TADDAA can be trusted.
+%    	\item Diagnosis of a good approximation: \textbf{additional reliability check}.
+%%    diagnosis of a poor approximation can still be trusted but diagnosis of a good approximation may not be reliable. \footnote{In the latter case, we should consider increasing the length of Markov chains or otherwise improving the Markov kernel.}
+% 		\end{itemize}
+% 		\pause
+%		\item Reliability Check: 
+%    \begin{itemize}
+%    	\item Use worst-case correlation coefficient : $\rho^{2}_{\max}(T)
+%    	\defas \max_{i} \rho^{2}_{i}(T)$.
+%    	\item Check passes: $\rho^{2}_{\max}(T) < 0.1$.
+%    \end{itemize}
+%\end{itemize}
+
+\end{frame}
+
+%\begin{frame}{A Reliability Check for the Diagnostic (Continued)}
+%% Instead, we propose to leverage the fact that we have many nearly independent chains to compute the correlation between the initial and final values of each chain.
+%% If the chains are mixing, then this correlation will be close to zero. 
+%% Specifically we propose to use the worst-case correlation coefficient
+%
+%\begin{itemize} 
+%    \item We propose to use the worst-case correlation coefficient
+%$
+%\rho^{2}_{\max}(T)
+%\defas \max_{i} \rho^{2}_{i}(T),
+%%&= \max_{k}\frac{\sum_{j=1}^{N} ( X_{j,k}^{(0)}-\hat{\mu}_{k}^{(0)})( X_{j,k}^{(T)}-\hat{\mu}_{k}^{(T)})}{\sum_{j=1}^{N}( x_{j,k}^{(0)}-\hat{\mu}_{k}^{(0)})^{2} ( x_{j,k}^{(T)}-\hat{\mu}_{k}^{(T)})^{2}},
+%$
+%where 
+%\[
+%\begin{aligned}
+%	% \rho^{2}\Big(X_{1:N,k}^{(0)},  X_{1:N,k}^{(T)}\Big)
+%	\textstyle \rho^{2}_{i}(T)
+%	\defas  \frac{\sum_{j=1}^{N} ( X_{j,i}^{(0)}-\hat{\mu}_{i}^{(0)})( X_{j,i}^{(T)}-\hat{\mu}_{i}^{(T)})}{\sqrt{\sum_{j=1}^{N}( X_{j,i}^{(0)}-\hat{\mu}_{i}^{(0)})^{2}} \sqrt{(\sum_{j=1}^{N} X_{j,i}^{(T)}-\hat{\mu}_{i}^{(T)})^{2}}}.
+%\end{aligned}
+%\]
+%    \item Check passes: $\rho^{2}_{\max}(T) < 0.1$.
+%    % \item $\rho^{2}_{\max}(T)$ large, then the check passes.
+%\end{itemize}
+%\end{frame}
+
+%\begin{frame}{Revisit (High-dimensional) Neal-Funnel Shape Model}
+%Neal's example has support for $\log(\sigma) \in \mathbb{R}$ and $x \in \mathbb{R}^{d-1}$. The parameterization of this model is given as follows:
+%$$
+%    \log(\sigma) \sim \mathcal{N}(0, \sigma_{0}^{2}), \quad x_{i} \sim \mathcal{N}(0,\sigma).
+%$$
+%For illustrative purpose, let $\beta_{1}=\log(\sigma)$ and $\beta_{2}=x_{1}$. In our experiment, $\sigma_{0}=1$.
+%%\begin{figure}
+%%    \centering 
+%%    \includegraphics[width = 0.25\textwidth]{neal_funnel.jpg}
+%%\end{figure}
+%\end{frame}
+
+\begin{frame}{Revisit (High-dimensional) Neal-Funnel Shape Model}
+\begin{figure}[t]
+    \includegraphics[width=\linewidth]{neal_high_new_1.png}
     \caption{Diagnostics for Neal-funnel shape model, where 
         %$B_{\text{mean}}$ and $B_{\text{variance}}$ are computed based on Barker proposal. 
         TADDAA uses the Barker proposal. 
         Here $\mu_{i}$ and $\sigma_{i}^{2}$ denote, respectively, the mean and variance of $X_{i}$. }
     \label{fig:High Dimensional Neal Funnel Diagnostics}
 \end{figure}
+\end{frame}
+
+\begin{frame}{Revisit (High-dimensional) Neal-Funnel Shape Model}
+	\begin{figure}[t]
+		\includegraphics[width=\linewidth]{neal_high_new_2.png}
+		\caption{Diagnostics for Neal-funnel shape model, where 
+			%$B_{\text{mean}}$ and $B_{\text{variance}}$ are computed based on Barker proposal. 
+			TADDAA uses the Barker proposal. 
+			Here $\mu_{i}$ and $\sigma_{i}^{2}$ denote, respectively, the mean and variance of $X_{i}$. }
+		\label{fig:High Dimensional Neal Funnel Diagnostics}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Experiment: Neal-Funnel Shape Model}
@@ -460,7 +570,7 @@ Ablation study on $d=30$: the lower bounds become nearly constant at our propose
 \end{frame}
 
 \begin{frame}{Experiment: Logistic Regression Using Horseshoe Prior}
-We use a logistic regression model with a sparsity-inducing horseshoe prior on 
+Use a logistic regression model with a sparsity-inducing horseshoe prior on 
 \[
 \begin{aligned}
     y &\mid \beta \sim \distBern(\operatorname{logit}^{-1}(X \beta)),\\
@@ -471,24 +581,44 @@ We use a logistic regression model with a sparsity-inducing horseshoe prior on
 \]
 where $y$ denotes the binary outcomes, $\tau >0 $ and $\lambda >0$ are global and local shrinkage parameters. 
 \begin{itemize}
-    \item $X \in \reals^{71 \times 100}$ is the features matrix.
-    \item Parameter dimensionality is $d = 203$.
+    \item $X \in \reals^{71 \times 100}$.
+    \item Parameter dimension $d = 203$.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Experiment: Logistic Regression Using Horseshoe Prior}
+\begin{frame}{Logistic Regression Using Horseshoe Prior: Mean Diagnostic}
 \begin{itemize}
-    \item Mean and variance confidence intervals: capture both accurate and inaccurate marginal estimates, provide quite precise lower bounds.
+    \item Diagnostic:
+    \begin{itemize}
+    	\item capture both accurate and inaccurate marginal estimates
+    	\item provide quite precise lower bounds
+    \end{itemize}
     \item Computational efficiency: use $28\%$ as many gradient evaluations as VI.
 \end{itemize}
      \begin{figure}
       \centering
-      \includegraphics[width=0.8\textwidth, height= 6cm]{cancer_diagnostic.pdf}
+      \includegraphics[width=\textwidth]{cancer_diagnostic_1.png}
       %\caption{Another figure caption.}
     \end{figure}
 \end{frame}
 
-\begin{frame}{Experiment: Logistic Regression Using Horseshoe Prior}
+\begin{frame}{Logistic Regression Using Horseshoe Prior: Variance Diagnostic}
+	%	\begin{itemize}
+		%		\item Diagnostic:
+		%		\begin{itemize}
+			%			\item capture both accurate and inaccurate marginal estimates
+			%			\item provide quite precise lower bounds
+			%		\end{itemize}
+		%		\item Computational efficiency: use $28\%$ as many gradient evaluations as VI.
+		%	\end{itemize}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{cancer_diagnostic_2.png}
+		%\caption{Another figure caption.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Logistic Regression Using Horseshoe Prior: Reliability Check}
 Reliability check: Barker and MALA pass reliability check, RWMH and HMC chains fail to mix. 
 \begin{figure}
   \centering
@@ -496,6 +626,29 @@ Reliability check: Barker and MALA pass reliability check, RWMH and HMC chains f
   %\caption{Another figure caption.}
 \end{figure} 
 \end{frame}
+
+%\section{Conclusion}
+\begin{frame}
+	\frametitle{Conclusion}
+	We propose a robust diagnostic tool for VI:
+		\begin{itemize}
+			\item supports marginal checks and is applicable to high-dimensional parameter spaces
+			\item provides lower bounds on the error of specific posterior summaries
+			\item is computationally efficient
+			\item can be validated using a simple correlation-based reliability check
+		\end{itemize}
+
+\end{frame}
+
+
+%\begin{frame}{Experiment: Logistic Regression Using Horseshoe Prior}
+%	Reliability check: Barker and MALA pass reliability check, RWMH and HMC chains fail to mix. 
+%	\begin{figure}
+%		\centering
+%		\includegraphics[width=0.8\textwidth]{cancer_reliability.pdf}
+%		%\caption{Another figure caption.}
+%	\end{figure} 
+%\end{frame}
 
 
 % Section 2
@@ -509,9 +662,9 @@ we aim to minimize the loss function
 \begin{equation*}
 \textstyle \loss(\theta) \defas N^{-1} \sum_{n=1}^{N} \ell(x_{n}, \theta) + N^{-1}\reg(\theta). 
 \label{eq:loss function}
-\end{equation*}
+\end{equation*}\pause
 \begin{itemize}
-    \item Gradient Descnet (GD): $$\textstyle\theta_{t} = \theta_{t-1} - \Lambda \nabla \textstyle \loss(\theta_{t-1})$$
+    \item Gradient Descnet (GD): $$\textstyle\theta_{t} = \theta_{t-1} - \Lambda \nabla \textstyle \loss(\theta_{t-1})$$\pause
     \item Stochastic Gradient Descnet (SGD): 
 \begin{equation*}
 \textstyle\theta_{t} = \theta_{t-1} - \Lambda G_{t}(\theta_{t-1}),
@@ -541,15 +694,21 @@ We would like to accurately estimate the stationary covariance structure
 \Sigma_{\theta} \defas \lim_{t \to \infty} \text{Cov} (\theta_{t}).
 \end{equation*}
 
-Characterizing the stationary covariance can help quantify 
+%Characterizing the stationary covariance can help quantify 
 \begin{itemize}
-     \item Test loss.
-     \item Escaping efficiency from a sharp minimal. 
+	\item Accurately estimate the stationary covariance $\Sigma_{\theta}$ under fixed learning rates:
+	\begin{itemize}
+     \item Test loss
+     \item Escaping efficiency from a sharp minimal\footnote{Zhu et al. (2019). The
+     	anisotropic noise in stochastic gradient descent: Its behavior of escaping from sharp minima and regularization
+     	effects. In International Conference on Machine Learning, pages 7654–7663. PMLR.}
+     \end{itemize}
+     \item Learning rate tuning guidance on optimal uncertainty quantification\footnote{Negrea et al. (2022). Tuning Stochastic Gradient Algorithms for Statistical Inference via Large-Sample Asymptotics.}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Related Work: Quadratic Loss}
-	Current works assume that the loss is well-approximated by a quadratic function:
+	Current works assume that the loss is well-approximated by a quadratic function\footnote{Mandt et al. (2017). Stochastic Gradient Descent as Approximate Bayesian Inference. Journal of Machine Learning Research.}:
 	%\begin{condition}
 	%	For all $t = 1,\dots,T$, it must hold that  
 	\begin{equation*}
@@ -560,38 +719,38 @@ Characterizing the stationary covariance can help quantify
 \end{frame}
 
 \begin{frame}{Related Work: Continuous-time Proxies}
-The most popular proxy approach is to replace discrete dynamics of the iterative algorithm by a continuous-time the Ornstein--Uhlenbeck (OU) process
+Approximate SGD by a continuous-time the Ornstein--Uhlenbeck (OU) process\footnote{Negrea et al. (2022). Tuning Stochastic Gradient Algorithms for Statistical Inference via Large-Sample Asymptotics.}
 $$
-	\dee \vartheta_{t} = -\Lambda \hess \vartheta_{t} \d t + \Lambda \widehat{C}^{1/2} \dee W_{t},
+	\dee \vartheta_{t} = -\Lambda \hess \vartheta_{t} \dee t + \Lambda \widehat{C}^{1/2} \dee W_{t},
 $$
-where $W_{t}$ be a $d$-dimensional Brownian motion and $\widehat{C} = \cov(G_{1}(\MLE))$ denotes the gradient noise covariance at the minimizer.
+where $W_{t}$ be a $d$-dimensional Brownian motion and $\widehat{C} = \cov(G_{1}(\MLE))$ is the stationary gradient noise. \pause
 \begin{itemize}
 	\item The covariance matrix of the stationary distribution $\Sigma_{\vartheta} \defas \cov(\pi_{\vartheta})$ 
 	satisfies 
-	$$\Sigma_{\vartheta} \hess + \hess \Sigma_{\vartheta} = \Lambda \widehat{C}.$$
+	$$\Sigma_{\vartheta} \hess + \hess \Sigma_{\vartheta} = \Lambda \widehat{C}.$$ \pause
 	\item \textcolor{red}{Limitation:} continuous-time proxies provide close approximation to SGD only for \textbf{small learning rates}.
 \end{itemize}
 
 \end{frame}
 
 \begin{frame}{Related Work: Discrete-time proxies}
-Assuming the loss is well-approximated by quadratic loss, the discrete-time proxy algorithm updates 
+Under quadratic loss, the discrete-time proxy algorithm updates 
 \begin{equation*}
 	\label{eq:discrete-time-model-general}
 	\psi_{t} = \psi_{t-1} - \frac{\Lambda}{B}\sum_{n\in S_{t}} \hess_{n} (\psi_{t-1} - \MLE),
 \end{equation*}
 where $\hess_{n} \defas  \grad^{2} \ell(x_{n}, \MLE)$.
-\begin{itemize}
-	\item \emph{Implicit} characterization of $\Sigma_{\psi}$:
+\begin{itemize} \pause 
+	\item \emph{Implicit} characterization of $\Sigma_{\psi}$\footnote{Liu et at. Noise and Fluctuation of Finite Learning Rate Stochastic Gradient Descent. ICML (2021).}:
 	\begin{equation*}
-		\Lambda \hess \Sigma_{\psi} + \Sigma_{\psi}  \hess \Lambda = \Lambda \left(\overline{C}_{\psi} + \hess \Sigma_{\psi} \hess \right)\Lambda,
+		\Lambda \hess \textcolor{red}{\Sigma_{\psi}} + \textcolor{red}{\Sigma_{\psi}}  \hess \Lambda = \Lambda \left( \textcolor{blue}{\overline{C}_{\psi}}+ \hess \textcolor{red}{\Sigma_{\psi}} \hess \right)\Lambda,
 		\label{eq: SGD stationary covariance}
 	\end{equation*}
-where $\Sigma_{\psi} \defas \cov(\pi_{\psi})$, and $\overline{C}_{\psi} \defas \E[\cov\{G_{1}(\psi_{\infty})\}]$ denotes the expected covariance of the gradient noise. 
-	\item For well-specified linear model and assume $X \sim \Norm(0, A)$: 
+where $\textcolor{red}{\Sigma_{\psi}} \defas \cov(\pi_{\psi})$, and $\textcolor{blue}{\overline{C}_{\psi}} \defas \E[\cov\{G_{1}(\psi_{\infty})\}]$ is the expected covariance of the gradient noise. 
+	\item For well-specified linear model and assume $X \sim \Norm(0, A)$\footnote{Liu et at. Strength of Minibatch Noise in SGD. ICLR (2022).}: 
 	\begin{equation*}
-		\overline{C}_{\psi} %= \lim_{t \to \infty} \mathbb{E} \left[ C(\theta_{t})\right] 
-		\approx B^{-1} \left( A \Sigma_{\psi} A + \Tr \left[ A \Sigma_{\psi} \right]A + \sigma^{2} A \right).
+		\textcolor{blue}{\overline{C}_{\psi}} %= \lim_{t \to \infty} \mathbb{E} \left[ C(\theta_{t})\right] 
+		\approx B^{-1} \left( A \textcolor{red}{\Sigma_{\psi}} A + \Tr \left[ A \textcolor{red}{\Sigma_{\psi}} \right]A + \sigma^{2} A \right).
 		\label{eq: sgd noise in well-specified linear model}
 	\end{equation*}
 	
@@ -600,29 +759,53 @@ where $\Sigma_{\psi} \defas \cov(\pi_{\psi})$, and $\overline{C}_{\psi} \defas \
 \end{frame}
 
 \begin{frame}{Limitations of discrete-time proxies}
+	\textbf{Limitation: }
 	\begin{itemize}
 		\item Assumptions often do not hold in practice:
 		\begin{itemize}
-			\item Sample size $N >> D$.
-			\item Mean Squared Error (MSE) loss.
-			\item The model is well-specified. 
+			\item Sample size $N \gg D$ and $N \to \infty$
+			\item Mean Squared Error (MSE) loss
+			\item The model is well-specified
 		\end{itemize}
 		\item There is no guarantee that the proxy process $(\psi_{t})_{t \ge 0}$ is close 
 		to the original process $(\theta_{t})_{t \ge 0}$.
+	\end{itemize} \pause
+	
+	\textbf{Contribution: }
+	\begin{itemize}
+	\item Propose a new discrete-time proxy algorithm that delivers more accurate stationary covariance estimates for: 
+	\begin{itemize}
+		\item Finite sample size $N$
+		\item More general convex loss
+		\item Misspecified model
 	\end{itemize}
+	\item Provide quantitative, non-asymptotic error analysis of our approximation.
+\end{itemize}
 \end{frame}
+
+%\begin{frame}{Contributions}
+%	\begin{itemize}
+%		\item Propose a new discrete-time proxy algorithm that delivers more accurate stationary covariance estimates for: 
+%		\begin{itemize}
+%			\item Finite sample size $N$
+%			\item More general convex loss
+%			\item Misspecified model
+%		\end{itemize}
+%		\item Provide quantitative, non-asymptotic error analysis of our approximation.
+%	\end{itemize}
+%\end{frame}
 
 \begin{frame}{A New Proxy Algorithm for Analyzing SG(L)D}
 Our approach is to apply a second-order Taylor approximation to each loss term $\ell_{n}(\theta) \defas \ell(x_{n}, \theta)$:
 \begin{equation*}
-	\tilde\ell_{n}\left(\theta\right)  \defas \ell_{n}(\MLE) + \nabla \ell_{n}^{\top}( \MLE) (\theta-\MLE)+ (\theta-\MLE)^{\top}\grad^{2} \ell_{n}(\MLE) (\theta-\MLE),
+	\tilde\ell_{n}\left(\theta\right)  \defas \ell_{n}(\MLE) + \nabla \ell_{n}^{\top}( \MLE) (\theta-\MLE)+ (\theta-\MLE)^{\top}\grad^{2} \ell_{n}(\MLE) (\theta-\MLE).
 	\label{eq: proxy algorithm framework for general loss}
 \end{equation*}\pause
 
 \begin{itemize}
 	\item Minimizer $\MLE$ satisfies 
 	$$
-	\nabla\textstyle\loss(\MLE) = \frac{1}{N} N^{-1} \sum_{n =1}^{N} \nabla \ell(x_{n}, \theta) + N^{-1} \nabla \reg(\theta) = 0
+	\nabla\textstyle\loss(\MLE) = \frac{1}{N} N^{-1} \sum_{n =1}^{N} \nabla \ell(x_{n}, \MLE) + N^{-1} \nabla \reg(\MLE) = 0.
 	$$
 	\item In general, 
 	$$
@@ -632,21 +815,21 @@ Our approach is to apply a second-order Taylor approximation to each loss term $
 \end{frame}
 
 \begin{frame}{Stationary Fluctuation}
-Our new proxy algorithm update as follows:
-\begin{equation}
+Our new proxy algorithm update:
+\begin{equation*}
 	\begin{aligned}
 		\psi_{t} &= \psi_{t-1} -\frac{\Lambda}{B} \sum_{n \in S_{t}} \left\lbrace \nabla \ell_{n}\big(\MLE\big) +\mathcal{J}_{n} \big(\psi_{t-1}-\MLE\big)\right\rbrace \\
 		&\quad - \frac{\Lambda}{N} \nabla \reg(\psi_{t-1}) + \sqrt{2\beta^{-1} \Lambda}\,\xi_{t-1}.
 	\end{aligned}
 	\label{eq: proxy discrete-time update for general loss}
-\end{equation}
+\end{equation*}
 	\begin{proposition} \label{thm:SGLD-stationary-covariance} 
 		%\label{corollary: stationary covariance of SGLD}
 		%Suppose the loss is well approximated by  a quadratic function \cref{eq: approximate loss function}, let $\theta_{t}$ be updated according to \cref{eq: general SGLD update rule}. 
 		%The stationary noise is, for a fixed learning rate matrix $\Lambda$, the stationary covariance $\Sigma$ satisfies
 		Assuming the iterates $(\psi_{t})_{t \ge 0}$ have a well-defined stationary distribution, the stationary covariance $\Sigma_{\psi}$ satisfies 
 		\begin{equation*}
-			\Lambda \hess \Sigma_{\psi} + \Sigma_{\psi}  \hess \Lambda = \Lambda \big(\overline{C}_{\psi} + \hess \Sigma_{\psi} \hess \big)\Lambda + 2\beta^{-1}\Lambda.
+			\Lambda \hess \textcolor{red}{\Sigma_{\psi}} + \textcolor{red}{\Sigma_{\psi}}  \hess \Lambda = \Lambda \big( \textcolor{blue}{\overline{C}_{\psi}} + \hess \textcolor{red}{\Sigma_{\psi}} \hess \big)\Lambda + 2\beta^{-1}\Lambda.
 			\label{eq: SGLD stationary covariance}
 		\end{equation*}
 %		In particular, if $\Sigma_{\psi}$ commutes with $\overline{C}_{\psi}$ and $\Lambda$, then
@@ -673,11 +856,10 @@ Our new proxy algorithm update as follows:
 		\begin{equation*}
 			\label{eq: covariance of stationary noise}
 			\begin{aligned}
-				\overline{C}_{\psi} =\frac{1}{B} \left( \mathcal{I} - \frac{1}{N^{2}} \Gamma \MLE \MLE^{\top} \Gamma^{\top} + \frac{1}{N} \sum_{n=1}^{N} \mathcal{J}_{n} \Sigma_{\psi} \mathcal{J}_{n} -  \mathcal{J} \Sigma_{\psi}\mathcal{J} \right),
+				\textcolor{blue}{\overline{C}_{\psi}} =\frac{1}{B} \left( \mathcal{I} - \frac{1}{N^{2}} \Gamma \MLE \MLE^{\top} \Gamma^{\top} + \frac{1}{N} \sum_{n=1}^{N} \mathcal{J}_{n} \textcolor{red}{\Sigma_{\psi}} \mathcal{J}_{n} -  \mathcal{J} \textcolor{red}{\Sigma_{\psi}} \mathcal{J} \right),
 			\end{aligned} 
 		\end{equation*}
-		where $\mathcal{I} \defas  \frac{1}{N} \sum_{n=1}^{N} \nabla\ell_{n}\bigl(\MLE\bigr) \nabla\ell_{n}\bigl(\MLE\bigr)^{\top}$.
-		If the mini-batches are sampled without replacement, the same result holds but with the right-hand side multiplied by $(N-B)/(N-1)$. 
+		where $\mathcal{I} \defas  \frac{1}{N} \sum_{n=1}^{N} \nabla\ell_{n}\bigl(\MLE\bigr) \nabla\ell_{n}\bigl(\MLE\bigr)^{\top}$, $\mathcal{J}_{n} = \nabla^{2}\ell_{n}\bigl(\MLE\bigr)$.
 	\end{theorem}
 \end{frame}
 
@@ -688,7 +870,7 @@ How to assess the accuracy of our proxy algorithm? \textbf{Wasserstein Distance}
 W_{2}(\pi, \tilde\pi) = \inf \E(\norm{\theta - \tilde\theta}^{2})^{1/2},
 \]
 where the infimum is over all joint distributions of $(\theta, \tilde\theta)$ such that $\theta \dist \pi$ and $\tilde\theta \dist \tilde\pi$. 
-\item $W_{2}(\pi_{\theta}, \pi_{\psi}) \leq \veps$ implies that
+\item $W_{2}(\pi_{\theta}, \pi_{\psi}) \leq \veps$ implies that \footnote{Huggins et al. Validated variational inference via practical posterior error bounds. AISTATS (2020)}
 \begin{equation*}
 	\begin{aligned}
 		&\label{eq:general-stdev-and-cov-error-bounds}
@@ -700,21 +882,21 @@ where the infimum is over all joint distributions of $(\theta, \tilde\theta)$ su
 \end{frame}
 
 \begin{frame}{Error Analysis}
-\begin{theorem} \label{thm:wasserstein-error-bound}
-	Under standard assumptions and $\Lambda = \lambda I_{D}$ for some $\lambda \in (0, 1/(2L))$,
-	then, letting $\beta \defas 1 - \lambda\mu \rbra*{1 - 2\lambda L}$, $\overline{M} \defas \{N^{-1} \sum_{n=1}^{N} M_{n}^{2}\}^{1/2}$,
-	and $C_{s} \defas  \E\rbra{\norm{\psi_{s} - \MLE}^{4}}$, for all $t = 1,2,\dots$,
-	\begin{equation*}
-	\label{eq:wasserstein-error-bound} 
-	\begin{aligned}
-\lefteqn{W_{2}^{2}(\pi_{\theta,t}, \pi_{\psi,t})} \\
-&\le \beta^{t}W_{2}^{2}(\theta_{0}, \psi_{0})  
-+ \lambda  \overline{M} \left\lbrace \frac{\lambda  \overline{M}}{2} + \frac{2}{\mu}\right\rbrace  \sum_{s=1}^{t}\beta^{t-s}C_{s-1}. \nonumber
-	\end{aligned}
-	\end{equation*}
-\end{theorem}
+%\begin{theorem} \label{thm:wasserstein-error-bound}
+%	Under standard assumptions and $\Lambda = \lambda I_{D}$ for some $\lambda \in (0, 1/(2L))$,
+%	then, letting $\beta \defas 1 - \lambda\mu \rbra*{1 - 2\lambda L}$, $\overline{M} \defas \{N^{-1} \sum_{n=1}^{N} M_{n}^{2}\}^{1/2}$,
+%	and $C_{s} \defas  \E\rbra{\norm{\psi_{s} - \MLE}^{4}}$, for all $t = 1,2,\dots$,
+%	\begin{equation*}
+%	\label{eq:wasserstein-error-bound} 
+%	\begin{aligned}
+%\lefteqn{W_{2}^{2}(\pi_{\theta,t}, \pi_{\psi,t})} \\
+%&\le \beta^{t}W_{2}^{2}(\theta_{0}, \psi_{0})  
+%+ \lambda  \overline{M} \left\lbrace \frac{\lambda  \overline{M}}{2} + \frac{2}{\mu}\right\rbrace  \sum_{s=1}^{t}\beta^{t-s}C_{s-1}. \nonumber
+%	\end{aligned}
+%	\end{equation*}
+%\end{theorem}
 \begin{corollary} \label{cor:stationary-wasserstein-error-bound} 
-	Under the same assumptions stated above and with $\beta = \infty$ (i.e., for the case of SGD), if $\lambda < L/4$, then 
+	Under the same assumptions stated above and with $\beta = \infty$ (i.e., for the case of SGD), there exists $L>0$, if $\lambda < L/4$, then 
 	there exists an explicit constant $A$ such that 
 	\[
 	W_{2}(\pi_{\theta}, \pi_{\psi}) \le A\frac{\lambda}{B}.
@@ -738,30 +920,34 @@ To validate our theory, we compare the predicted stationary covariance structure
 \begin{frame}{Experiments: Linear Regression}
 \begin{figure}
 	\centering
-	\begin{minipage}[b]{0.4\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{linear_simulation_single.pdf} 
-		%	\caption{First PDF}
-	\end{minipage}
-	\hspace{0.0001\textwidth}  % Space between the two PDFs
-	\begin{minipage}[b]{0.4\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{linear_real_single.pdf} 
-		%	\caption{First PDF}
-	\end{minipage}
-	%\caption{Compare learning rate tuning guidance suggested by different theories on a Boston Housing dataset.}
-	\caption{Comparison of estimated stationary covariance structure for linear regression at $3\sigma$ confidence region on \textbf{(left)} simulated misspecified data with heteroskedastic noise 
-		and \textbf{(right)} the classic Boston housing dataset with $\lambda = 0.1$ and $B = 32$.
-		Our theory provides more accurate stationary covariance predictions in both cases.
-	}\vspace{-1em}
-	\label{Fig: linear regression fixed_lr}
-	%	\label{Fig: Linear regression on synthetic dataset_fixed_lr}
+\includegraphics[width=\textwidth]{linear.png} 
 \end{figure}
+%\begin{figure}
+%	\centering
+%	\begin{minipage}[b]{0.4\textwidth}
+%		\centering
+%		\includegraphics[width=\textwidth]{linear_simulation_single.pdf} 
+%		%	\caption{First PDF}
+%	\end{minipage}
+%	\hspace{0.0001\textwidth}  % Space between the two PDFs
+%	\begin{minipage}[b]{0.4\textwidth}
+%		\centering
+%		\includegraphics[width=\textwidth]{linear_real_single.pdf} 
+%		%	\caption{First PDF}
+%	\end{minipage}
+%	%\caption{Compare learning rate tuning guidance suggested by different theories on a Boston Housing dataset.}
+%%	\caption{Comparison of estimated stationary covariance structure for linear regression at $3\sigma$ confidence region on \textbf{(left)} simulated misspecified data with heteroskedastic noise 
+%%		and \textbf{(right)} the classic Boston housing dataset with $\lambda = 0.1$ and $B = 32$.
+%%		Our theory provides more accurate stationary covariance predictions in both cases.
+%%	}\vspace{-1em}
+%%	\label{Fig: linear regression fixed_lr}
+%	%	\label{Fig: Linear regression on synthetic dataset_fixed_lr}
+%\end{figure}
 \end{frame}
 
 \begin{frame}{Experiments: Poisson Regression}
 \begin{itemize}
-	\item \emph{Simulated misspecified data.}:
+	\item \emph{Simulated well-specified data.}:
 \begin{equation*}
 	\label{eq: poission regression model}
 	y_{n} \sim \text{Poisson}(\exp\{x_{n}^{\top}\theta_{\star}\}),
@@ -772,54 +958,71 @@ To validate our theory, we compare the predicted stationary covariance structure
 \end{frame}
 
 \begin{frame}{Experiments: Poisson Regression}
-\begin{figure}[t]
-	\centering
-	\begin{minipage}[b]{0.4\textwidth}
+	\begin{figure}
 		\centering
-		\includegraphics[width=\textwidth]{poisson_simulation_single.pdf} 
-		%	\caption{First PDF}
-	\end{minipage}
-	\hspace{0.0001\textwidth}  % Space between the two PDFs
-	\begin{minipage}[b]{0.4\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{poisson_real_single.pdf} 
-		%	\caption{First PDF}
-	\end{minipage}
-	
-	\caption{Comparison of estimated stationary covariance structure for Poisson regression at $3\sigma$ confidence region with \textbf{(left)} simulated well-specified data and \textbf{(right)} the German credit data by setting batch size $\lambda = 0.1$, and $B = 32$.
-		%Our theory provides more accurate stationary covariance predictions in both cases.
-	} % synthetic and real-world dataset.}
-\label{Fig: Poisson regression fixed_lr}
-\end{figure}
+		\includegraphics[width=\textwidth]{poisson.png} 
+	\end{figure}
+%\begin{figure}[t]
+%	\centering
+%	\begin{minipage}[b]{0.4\textwidth}
+%		\centering
+%		\includegraphics[width=\textwidth]{poisson_simulation_single.pdf} 
+%		%	\caption{First PDF}
+%	\end{minipage}
+%	\hspace{0.0001\textwidth}  % Space between the two PDFs
+%	\begin{minipage}[b]{0.4\textwidth}
+%		\centering
+%		\includegraphics[width=\textwidth]{poisson_real_single.pdf} 
+%		%	\caption{First PDF}
+%	\end{minipage}
+%	
+%	\caption{Comparison of estimated stationary covariance structure for Poisson regression at $3\sigma$ confidence region with \textbf{(left)} simulated well-specified data and \textbf{(right)} the German credit data by setting batch size $\lambda = 0.1$, and $B = 32$.
+%		%Our theory provides more accurate stationary covariance predictions in both cases.
+%	} % synthetic and real-world dataset.}
+%\label{Fig: Poisson regression fixed_lr}
+%\end{figure}
 \end{frame}
 
 
 
 
 % Conclusion and Further work
-\section{Conclusion}
+%\section{Conclusion}
+
 \begin{frame}
   \frametitle{Conclusion}
-  \begin{itemize}
-  \item We propose a diagnostic tool for VI:
+We have established a rigorous framework for understanding SGD and SGLD under:
 \begin{itemize}
-	\item supports marginal checks and is applicable to high-dimensional parameter spaces
-	\item provides lower bounds on the error of specific posterior summaries
-	\item is computationally efficient
-	\item can be validated using a simple correlation-based reliability check
+	\item  large learning rate. 
+	\item $N$ is not large compared to $D$.
+	\item model is incorrect.
 \end{itemize}
-\item We propose tools for stationary covariance analysis of stochastic gradient algorithms:
-\begin{itemize}
-	\item has minimal checkable assumptions. 
-	\item Nonasymptotic error analysis. 
-\end{itemize}
-  \end{itemize}
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+	
+\begin{enumerate}
+	\item Post hoc quality check for variational approximation:
+	\begin{itemize}
+		\item support marginal checks
+		\item robust in high-dimensional parameter sapce
+		\item computationally efficient
+	\end{itemize}
+	\item Uncertainty quantification for subsampling methods: 
+	\begin{itemize}
+		\item Accurate stationary covariance structure estimation for stochastic gradient algorithms under fixed/nonvanishing learning rate
+		\item Optimal learning rate tuning guidance 
+	\end{itemize}
+\end{enumerate}
+	
 \end{frame}
 
 
 % A thank you slide
 \begin{frame}{\Large Acknowledgments}
-	\includegraphics[width=\textwidth]{acknow.pdf} 
+	\includegraphics[width=\textwidth]{acknow.png} 
 \end{frame}
 
 \end{document}
